@@ -1,0 +1,126 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+
+\title{Convex Optimization PSET 1}
+\author{Rafael Cosman}
+
+\begin{document}
+\maketitle
+
+\section{Problem 2.5}
+The distance between two parallel hyperplanes is $|b_{2} - b_{1}| / ||a||$.
+
+Reasoning:
+Consider the first hyperplane. We will compute its distance from the origin.
+
+The closest point on the plane to the origin will be $b/||a||^2$
+
+\section{Problem 2.7}
+We wish to describe $x| ||x-a||_2\leq||x-b||_2$ as an inequality of the form $c^Tx \leq d$
+
+Let us manipulate $||x-a||_2 \leq ||x-b||_2$
+
+$||x-a||_2^2 \leq ||x-b||_2^2$
+
+$(x-a)^T(x-a) \leq (x-b)^T(x-b)$
+
+\section{Problem 2.12}
+\subsection{Subproblem a: slab}
+Convex. Because it’s the intersection of two half-spaces, which we can assume are convex.
+\subsection{Subproblem b: rectangle}
+Convex. Because it’s the intersection of $2n$ half-spaces, which we assume are convex.
+\subsection{Subproblem c: wedge}
+Convex. Intersection of half-spaces.
+\subsection{Subproblem d: set of points closer to a point than to a set}
+Convex. This is just the intersection of n half-spaces, assuming that there are n elements of the set. The reasoning behind this is the same as that in 2.7.
+\subsection{Subproblem e: set of points closer to set $S$ than to set $T$}
+Not Convex. I will provide an example in $R$. Let $s = {-2, 2}$. Let $T = {0}$. The points closer to $S$ than to $T$ are all ${x | x < -1 or x > 1}$, which is trivially not a convex set, because it is disjoint.
+\subsection{Subproblem f}
+Convex. Take $S_1$, translate it by each element of $S_2$ and take the intersection of those.
+\subsection{Subproblem g}
+Convex. This goes from a tiny ellipse (theta near 0) up to a plane at (theta=1). If theta could exceed 1, the set would be concave.
+
+
+\section{Problem 2.15}
+
+First we will prove that $Ef(x) <= Eg(x)$ is a convex set regardless of $f$ and $g$. This will allow us to solve a bunch of problems very easily later.
+
+We rewrite this as $bTp <= cTp$,
+where $b$ is a vector corresponding to $f(a[i])$ for all $i$
+and $c$ is a vector corresponding to $g(a[i])$ for all $i$
+
+We can manipulate this to be (c-b)Tp >= 0
+
+The x that satisfy this inequality is a convex set, because this is just the equation for a polygon.
+
+Thus for all f and g, Ef(x) <= Eg(x). We will refer to this as theorem 1.
+a:
+Convex. This is a specific case of theorem 1, where f(x) is 
+b:
+c:
+Convex. This is a specific case of theorem 1, where f(x) is |x3| and g(x) is alpha*|x|
+d:
+Convex. This is a specific case of theorem 1, where f(x) is x2 and g(x) is alpha
+e:
+Convex. This is a specific case of theorem 1, where f(x) is -x2 and g(x) is -alpha. (Flipping both signs causes the inequality to reverse.)
+f:
+Not Convex. Proof by counterexample. Let alpha be 0. This yields the set of probability distributions with zero variance. This set has n elements. The first element has p1 = 1 and all other p = 0. The second element has p2 = 1 and all other p = 0. Etc.
+
+These points are at the vertices of the simplex. The set is clearly not convex.
+g:
+Convex. It’s complement is a concave set.
+h:
+Convex. This is a specific case of theorem 1, where f(x) is 1 for all x <= alpha, and 0 for all x > alpha. g(x) is .25.
+i:
+
+
+\section{Problem 2.23}
+We will work in R2, and use the convention of representing each element of $R^2$ as $(x, y)$
+First set: $epi(y=1/x)$
+Second set: $y=0$
+
+Both sets are closed.
+
+The key to why they are not strictly separable is that for any line y=epsilon, the First set will include points below the line (for example, the point at $(2/epsilon, epsilon/2)$)
+
+\section{Problem 2.28}
+\subsection{$n = 1$}
+In this case, $x1 > 0$ is the only condition necessary.
+
+\subsection{$n = 2$}
+As discussed in class,
+$x_1 \geq 0$
+$x_3 \geq 0$
+$x_1x_3 - x_2x_2 \geq 0$
+
+\subsection{$n = 3$}
+Firstly, all of the elements on the diagonal must be non-negative:
+
+$x_1 \geq 0$
+
+$x_4 \geq 0$
+
+$x_4 \geq 0$
+
+
+All of the 2x2 determinants must be non-negative:
+
+$x_1x_4 - x_2x_2 \geq 0$
+
+$x_1x_6 - x_3x_3 \geq 0$
+
+$x_4x_6 - x_5x_5 \geq 0$
+
+
+The 3x3 determinant of the whole matrix must be non-negative:
+
+$(x_1x_4x_6 + x_2x_5x_3 + x_2x_5x_3) - (x_3x_4x_3 + x_5x_5x_1 + x_6x_2x_2) \geq 0$
+
+These conditions are necessary and sufficient for the matrix to be positive semidefinite.
+
+\end{document}
