@@ -1,6 +1,6 @@
 townStatesRun = ->
-	upgradeEvadeXPCost = (@evade + .1) * 1000
-	upgradeBlockXPCost = (@block + 1) * 100
+	upgradeEvadeXPCost = (@evade * 1000 + 100)
+	upgradeBlockXPCost = (@block * 100 + 100)
 
 	#This is the town
 	if @state == "inTown"
@@ -13,23 +13,24 @@ townStatesRun = ->
 	else if @state == "Trainer"
 		println "Trainer: I can upgrade your block or evade."
 		button "upgrade block", "Upgrade Block to #{block + 1} (#{upgradeBlockXPCost} xp)"
-		button "upgrade evade", "Upgrade Evade to #{@evade + .1} (#{upgradeEvadeXPCost} xp)"
+		button "upgrade evade", "Upgrade Evade to #{@evade + 0.1} (#{upgradeEvadeXPCost} xp)"
+		button "inTown", "Leave the trainer"
 	else if @state == "upgrade evade"
 		if @xp >= upgradeEvadeXPCost
 			@xp -= upgradeEvadeXPCost
 			@evade += 0.1
 			println "You train and train and you finally get stronger"
-		else 
+		else
 			println "I aint gonna train you if you arent going to pay me my price."
-			setState "trainer"
+		setState "Trainer"
 	else if @state == "upgrade block"
 		if @xp >= @block * 100
 			@xp -= @block * 100
 			@block += 1
 			println "You train and train and you finally get more agile"
-		else 
+		else
 			println "I aint gonna train you if you arent going to pay me my price."
-			setState "trainer"
+		setState "Trainer"
 
 	# --- Shops ---
 	else if @state == "shops"
@@ -42,7 +43,7 @@ townStatesRun = ->
 		println "Which way do you want to go?"
 		button "inTown", "Enter the town"
 		showMap()
-	
+
 	# --- Blacksmith ---
 	else if @state == "blacksmith"
 		println "John: Hello there, what can i do for you?"
@@ -51,7 +52,7 @@ townStatesRun = ->
 		button "shops", "Leave the Blacksmith"
 	else if @state == "daggers"
 		println "Here's what I've got"
-		
+
 		@returnToState = @state
 
 		button smallDagger, smallDagger
@@ -67,7 +68,7 @@ townStatesRun = ->
 		println "These are the swords I've got."
 
 		@returnToState = @state
-		
+
 		button swordofthefeather, swordofthefeather
 		button supersword, supersword
 		button swordofthesun, swordofthesun
@@ -80,7 +81,7 @@ townStatesRun = ->
 	else if @state == "fletcher"
 		println "Ken: Hello there me matey. What can I do for you on this fine day?"
 		button "crossbows", "Might i have a look at your crossbows."
-		button "longBows", "i'll take a look at your long bows."  
+		button "longBows", "i'll take a look at your long bows."
 		button "shops", "Leave the Fletcher"
 	else if @state == "crossbows"
 		println "Here's what I've got in the way of crossbows."
@@ -92,14 +93,14 @@ townStatesRun = ->
 
 		if not visited "mage"
 			println "You may call me Almerond."
-		
+
 		button "potions", "May I look at your potion selection?"
 		button "staffs", "What staffs do you have?"
 		button "scrolls", "What in the way of scrolls do you have?"
 		button "heal", "Heal 10 hp (100 gp)"
 		button "enchant", "Enchant Weapon (500 gp)"
 		button "shops", "I'm sorry for intruding, Almerond. Thank you."
-	
+
 	else if @state == "enchant"
 		cost = 500
 		if @gp >= cost
@@ -128,7 +129,7 @@ townStatesRun = ->
 	else if @state == "scrolls"
 		println "I'm sorry, I don't have any scrolls at the moment. Come back later."
 		setState "mage"
-	
+
 	# ------------ People ------------
 	else if @state == "people"
 		if prob .25
@@ -146,7 +147,7 @@ townStatesRun = ->
 		else
 			if (visited "Dungeon guy") and (visited "Zealon Dungeon")
 				setState "Dungeon guy win"
-			else 
+			else
 				println "Howdy, stranger. My name is Alastor. Let me tell you my story."
 				println "My family's heirloom, a great horn that my great great great grandfather used in the great guild wars, one day dissapeared. I raised a hue and cry and paid the best trackers around to find the people that stole it. They eventually tracked them down to the Zealon Dungeon. I tried to hire people to kill them and get my horn back but everyone was to scared to venture into the Zealon Dungeon. So I wish for you to go in there, kill them and get me my horn back. I'll reward you 1000 gold for retrieving the horn."
 				button "inTown", "I'll see what I can do."
@@ -160,10 +161,10 @@ townStatesRun = ->
 		if visited "mayor win"
 			println "Thanks"
 		else
-			println "Ever since the great guild wars that ravaged this land long ago,	
+			println "Ever since the great guild wars that ravaged this land long ago,
 			 The land has been infested with every sort of nasty mosnter.
 			 The goblins are the worst though,
-			 They raid the villages of alavar. 
+			 They raid the villages of alavar.
 			 They are a menace to everyone.
 			 So i wish for you to go and raid them.
 			 I will pay you 500 gold (kill 5 goblins)."
@@ -178,7 +179,7 @@ townStatesRun = ->
 			println "Take your hands off that dagger. You aint got the money to pay for that beauty."
 
 		setState loadState()
-	
+
 	else if @state == swordofthefeather.toString()
 		if @gp >= swordofthefeather.price
 			@gp -= swordofthefeather.price
@@ -188,7 +189,7 @@ townStatesRun = ->
 			println "Get out of here cheapskate."
 
 		setState loadState()
-	
+
 	else if @state == supersword.toString()
 		if @gp >= supersword.price
 			@gp -= supersword.price
@@ -205,7 +206,7 @@ townStatesRun = ->
 			@weapon = swordofthesun
 			println "You pick up the sword and it glows with an angelic light."
 
-		else 
+		else
 			println "Dont come back here Hobo."
 		setState loadState()
 	else if @state == daggerofshadow.toString()
@@ -213,7 +214,7 @@ townStatesRun = ->
 			@gp -= daggerofshadow.price
 			@weapon = daggerofshadow
 			println "you can barely see the dagger its so cloaked by Shadow. it is cold to the touch."
-		else 
+		else
 			println "Set your hands of that dagger."
 		setState loadState()
 	else if @state == daggerofdeath.toString()
@@ -223,13 +224,13 @@ townStatesRun = ->
 			println "This dagger has the stench of Death. it had perpetual blood on its edge. No matter how much you wipe it never comes of."
 		else
 			println "Stop touching that beauty, poor guy. You can't afford it."
-		setState loadState()	
+		setState loadState()
 	else if @state == powerfulllongbow.toString()
 		if @gp >= powerfulllongbow.price
 			@gp -= powerfulllongbow.price
 			@weapon = powerfulllongbow
 			println "You heft the beautiful long bow and then throw it over your shoulder."
-		else 
+		else
 			println "You aint got the money te pay for that beauty, so go away."
 		setState loadState()
 
@@ -241,4 +242,3 @@ townStatesRun = ->
 		else
 			println "Get your hands of that ye scurvy scallywag, that one of my best bows. Unless yev actually got te gold for it."
 		setState loadState()
-

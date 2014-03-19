@@ -250,8 +250,8 @@
 
   townStatesRun = function() {
     var cost, upgradeBlockXPCost, upgradeEvadeXPCost;
-    upgradeEvadeXPCost = (this.evade + .1) * 1000;
-    upgradeBlockXPCost = (this.block + 1) * 100;
+    upgradeEvadeXPCost = this.evade * 1000 + 100;
+    upgradeBlockXPCost = this.block * 100 + 100;
     if (this.state === "inTown") {
       println("You are in the town of Zemboria");
       println("What do you want to do?");
@@ -262,25 +262,26 @@
     } else if (this.state === "Trainer") {
       println("Trainer: I can upgrade your block or evade.");
       button("upgrade block", "Upgrade Block to " + (block + 1) + " (" + upgradeBlockXPCost + " xp)");
-      return button("upgrade evade", "Upgrade Evade to " + (this.evade + .1) + " (" + upgradeEvadeXPCost + " xp)");
+      button("upgrade evade", "Upgrade Evade to " + (this.evade + 0.1) + " (" + upgradeEvadeXPCost + " xp)");
+      return button("inTown", "Leave the trainer");
     } else if (this.state === "upgrade evade") {
       if (this.xp >= upgradeEvadeXPCost) {
         this.xp -= upgradeEvadeXPCost;
         this.evade += 0.1;
-        return println("You train and train and you finally get stronger");
+        println("You train and train and you finally get stronger");
       } else {
         println("I aint gonna train you if you arent going to pay me my price.");
-        return setState("trainer");
       }
+      return setState("Trainer");
     } else if (this.state === "upgrade block") {
       if (this.xp >= this.block * 100) {
         this.xp -= this.block * 100;
         this.block += 1;
-        return println("You train and train and you finally get more agile");
+        println("You train and train and you finally get more agile");
       } else {
         println("I aint gonna train you if you arent going to pay me my price.");
-        return setState("trainer");
       }
+      return setState("Trainer");
     } else if (this.state === "shops") {
       println("The shops are small but friendly");
       button("blacksmith", "Visit John the Blacksmith");
@@ -395,7 +396,7 @@
       if (visited("mayor win")) {
         return println("Thanks");
       } else {
-        return println("Ever since the great guild wars that ravaged this land long ago,				 The land has been infested with every sort of nasty mosnter.			 The goblins are the worst though,			 They raid the villages of alavar. 			 They are a menace to everyone.			 So i wish for you to go and raid them.			 I will pay you 500 gold (kill 5 goblins).");
+        return println("Ever since the great guild wars that ravaged this land long ago,			 The land has been infested with every sort of nasty mosnter.			 The goblins are the worst though,			 They raid the villages of alavar.			 They are a menace to everyone.			 So i wish for you to go and raid them.			 I will pay you 500 gold (kill 5 goblins).");
       }
     } else if (this.state === smallDagger.toString()) {
       if (this.gp >= smallDagger.price) {
@@ -774,15 +775,12 @@
     townStatesRun();
     mapStatesRun();
     if (this.state === "fightYourTurn") {
-      println("A");
       _ref = this.enemies;
       for (_k = 0, _len = _ref.length; _k < _len; _k++) {
         enemy = _ref[_k];
         button("dealDamageToEnemy", "Attack " + enemy);
       }
-      println("B");
       button("runAway", "Run Away");
-      println("C");
     } else if (this.state === "dealDamageToEnemy") {
       damage = this.weapon.roll();
       if (damage === 0) {
